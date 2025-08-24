@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PawPal - Animal Shelter Management & Adoption System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #a8c5e8 0%, #b8d4f0 100%);
+            --secondary-gradient: linear-gradient(135deg, #d4e9f7, #c8e1f2);
+            --accent-blue: #7fb3d4;
+            --light-blue: #e8f4fd;
+            --medium-blue: #b3d9f2;
+            --dark-blue: #5a9bc4;
+            --success-color: #81c784;
+            --warning-color: #ffb74d;
+            --danger-color: #e57373;
+            --background-light: #f8fcff;
+            --text-dark: #2c3e50;
+            --text-light: #546e7a;
+            --border-light: #d6ebf5;
+            --shadow: 0 5px 20px rgba(123, 179, 212, 0.15);
+            --border-radius: 15px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--background-light);
+        }
+
+        /* Enhanced Header & Navigation */
+        .header {
+            background: var(--primary-gradient);
+            color: var(--text-dark);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--dark-blue);
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--dark-blue);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            font-weight: 500;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.3);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::before,
+        .nav-links a.active::before {
+            left: 0;
+        }
+
+        .nav-links a:hover, 
+        .nav-links a.active {
+            background: rgba(255,255,255,0.4);
+            backdrop-filter: blur(10px);
+            color: var(--dark-blue);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transition: var(--transition);
+            transform: translate(-50%, -50%);
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        .btn-outline:hover {
+            background: var(--accent-blue);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(127, 179, 212, 0.3);
+        }
+
+        .btn-primary {
+            background: var(--accent-blue);
+            color: white;
+            border: 2px solid var(--accent-blue);
+        }
+
+        .btn-primary:hover {
+            background: var(--dark-blue);
+            border-color: var(--dark-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(90, 155, 196, 0.4);
+        }
+
+        /* Main Content Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Enhanced Auth Forms */
+        .auth-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+
+        .auth-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .auth-form {
+            background: white;
+            padding: 3rem;
+            border-radius: var(--border-radius);
+            width: 100%;
+            max-width: 450px;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s ease;
+            border-top: 4px solid var(--accent-blue);
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: var(--transition);
+        }
+
+        .close-btn:hover {
+            color: var(--danger-color);
+            transform: rotate(90deg);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .form-group input, 
+        .form-group select, 
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .form-group input:focus, 
+        .form-group select:focus, 
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(127, 179, 212, 0.1);
+            transform: translateY(-1px);
+        }
+
+        /* Enhanced Dashboard Layout */
+        .dashboard {
+            display: none;
+            min-height: calc(100vh - 100px);
+        }
+
+        .dashboard.active {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        .sidebar {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            height: fit-content;
+            position: sticky;
+            top: 120px;
+            border-left: 4px solid var(--accent-blue);
+        }
+
+        .sidebar h3 {
+            margin-bottom: 1.5rem;
+            color: var(--accent-blue);
+            text-align: center;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu button {
+            width: 100%;
+            padding: 1rem;
+            background: transparent;
+            border: none;
+            text-align: left;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .sidebar-menu button:hover, 
+        .sidebar-menu button.active {
+            background: var(--light-blue);
+            color: var(--dark-blue);
+            transform: translateX(5px);
+        }
+
+        .main-content {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border-top: 4px solid var(--medium-blue);
+        }
+
+        /* Enhanced Animal Grid */
+        .animals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .animal-card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 2px solid var(--border-light);
+            position: relative;
+        }
+
+        .animal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--light-blue);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .animal-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(127, 179, 212, 0.2);
+            border-color: var(--accent-blue);
+        }
+
+        .animal-card:hover::before {
+            opacity: 0.05;
+        }
+
+        .animal-image {
+            height: 200px;
+            background: var(--secondary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .animal-image::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: var(--transition);
+        }
+
+        .animal-card:hover .animal-image::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .status-available {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .status-adopted {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .animal-info {
+            padding: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .animal-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .animal-details {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .animal-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            border-radius: 20px;
+        }
+
+        /* Enhanced Statistics Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--primary-gradient);
+            color: var(--text-dark);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            border: 2px solid var(--medium-blue);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px) scale(1.02);
+        }
+
+        .stat-card:hover::before {
+            top: -30%;
+            right: -30%;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+            color: var(--dark-blue);
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+            color: var(--text-dark);
+        }
+
+        /* Enhanced Filter Section */
+        .filters {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--accent-blue);
+        }
+
+        .filter-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            align-items: end;
+        }
+
+        /* Enhanced Alert Messages */
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            display: none;
+            position: relative;
+            border-left: 4px solid;
+        }
+
+        .alert.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert-success {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border-left-color: var(--success-color);
+        }
+
+        .alert-error {
+            background: #ffebee;
+            color: #c62828;
+            border-left-color: var(--danger-color);
+        }
+
+        /* Enhanced Profile Section */
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--light-blue);
+            border-radius: var(--border-radius);
+            border: 2px solid var(--border-light);
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--dark-blue);
+            box-shadow: 0 5px 15px rgba(127, 179, 212, 0.3);
+            border: 3px solid white;
+        }
+
+        /* Enhanced Landing Page */
+        .landing {
+            display: block;
+        }
+
+        .hero {
+            background: 
+                linear-gradient(rgba(168, 197, 232, 0.9), rgba(184, 212, 240, 0.9)), 
+                radial-gradient(circle at 20% 50%, rgba(127, 179, 212, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(179, 217, 242, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(90, 155, 196, 0.3) 0%, transparent 50%),
+                var(--primary-gradient);
+            height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--text-dark);
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid var(--medium-blue);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="pawprints" patternUnits="userSpaceOnUse" width="100" height="100"><circle cx="20" cy="20" r="3" fill="rgba(90,155,196,0.2)"/><circle cx="80" cy="60" r="3" fill="rgba(90,155,196,0.2)"/></pattern></defs><rect width="1200" height="800" fill="url(%23pawprints)"/></svg>');
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(1deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            animation: fadeInUp 1s ease 0.2s both;
+            color: var(--dark-blue);
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.4s both;
+            color: var(--text-dark);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border-top: 4px solid transparent;
+        }
+
+        .feature-card:nth-child(1) { border-top-color: var(--accent-blue); }
+        .feature-card:nth-child(2) { border-top-color: var(--medium-blue); }
+        .feature-card:nth-child(3) { border-top-color: var(--success-color); }
+        .feature-card:nth-child(4) { border-top-color: var(--warning-color); }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(127, 179, 212, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* Enhanced Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s ease;
+            border-top: 4px solid var(--accent-blue);
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--border-light);
+            border-top: 3px solid var(--accent-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .dashboard.active {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .animals-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Hide/Show sections */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Additional enhancements */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(127, 179, 212, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(127, 179, 212, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(127, 179, 212, 0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo" onclick="showSection('home')">
+                🐾 PawPal
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showSection('home')" class="nav-link active">Home</a></li>
+                <li><a href="#" onclick="showSection('animals')" class="nav-link">Animals</a></li>
+                <li><a href="#" onclick="showSection('services')" class="nav-link">Services</a></li>
+                <li><a href="#" onclick="showSection('about')" class="nav-link">About</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="#" class="btn btn-outline" onclick="showAuthModal('login')">Login</a>
+                <a href="#" class="btn btn-primary pulse" onclick="showAuthModal('register')">Register</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Landing/Home Section -->
+        <section class="section active landing" id="home">
+            <div class="hero">
+                <div class="hero-content">
+                    <h1>Welcome to PawPal</h1>
+                    <p>Complete Animal Shelter Management & Adoption System</p>
+                    <button class="btn btn-primary" onclick="showAuthModal('register')">Get Started</button>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">150+</div>
+                    <div class="stat-label">Animals Rescued</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">85</div>
+                    <div class="stat-label">Successful Adoptions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">25</div>
+                    <div class="stat-label">Volunteers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">৳370K</div>
+                    <div class="stat-label">Donations Received</div>
+                </div>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🏠</div>
+                    <h3>Animal Adoption</h3>
+                    <p>Find your perfect companion from our rescued animals waiting for loving homes.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏥</div>
+                    <h3>Veterinary Care</h3>
+                    <p>Book appointments with qualified vets for health checkups and medical care.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤝</div>
+                    <h3>Volunteer Program</h3>
+                    <p>Join our volunteer team to help with feeding, cleaning, and caring for animals.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💝</div>
+                    <h3>Donations</h3>
+                    <p>Support our cause with donations to help us care for more animals in need.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Animals Section -->
+        <section class="section" id="animals">
+            <h2>Available Animals</h2>
+            
+            <div class="filters">
+                <div class="filter-row">
+                    <div class="form-group">
+                        <label>Species</label>
+                        <select id="filterSpecies" onchange="filterAnimals()">
+                            <option value="">All Species</option>
+                            <option value="dog">Dog</option>
+                            <option value="cat">Cat</option>
+                            <option value="bird">Bird</option>
+                            <option value="rabbit">Rabbit</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="filterStatus" onchange="filterAnimals()">
+                            <option value="">All Status</option>
+                            <option value="available">Available</option>
+                            <option value="adopted">Adopted</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Age Range</label>
+                        <select id="filterAge" onchange="filterAnimals()">
+                            <option value="">All Ages</option>
+                            <option value="young">0-2 years</option>
+                            <option value="adult">2-7 years</option>
+                            <option value="senior">7+ years</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="animals-grid" id="animalsGrid">
+                <!-- Animals will be populated here -->
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="section" id="services">
+            <h2>Our Services</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🐕‍🦺</div>
+                    <h3>Animal Rescue</h3>
+                    <p>We rescue abandoned and stray animals, providing them with shelter and care.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💉</div>
+                    <h3>Medical Care</h3>
+                    <p>Comprehensive veterinary services including vaccinations, treatments, and surgery.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="section" id="about">
+            <h2>About PawPal</h2>
+            
