@@ -1,29 +1,29 @@
 <!DOCTYPE html>
-<html lang="en" data-page="adopt">
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
   <title>Adopt Animal</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
 </head>
-<body>
+<body data-page="adopt">
   <div class="sidebar">
     <a href="dashboard.html">Dashboard</a>
     <a href="browse.html">Browse</a>
     <a href="adopt.html">Adopt</a>
-    <a href="vet.html">Vet</a>
     <a href="volunteer.html">Volunteer</a>
     <a href="donate.html">Donate</a>
     <a href="review.html">Review</a>
   </div>
-  <div class="container" id="main">
-    <div class="box">
-      <h3>Adopt: <span id="selectedAnimal"></span></h3>
-      <form>
-        <input type="date" required>
-        <input type="time" required>
-        <button type="submit">Confirm Adoption</button>
-      </form>
-    </div>
+
+  <div class="adopt-container">
+    <h2>Confirm Adoption</h2>
+    <form id="adoptForm" class="adopt-form">
+      <p id="selectedAnimalText">Loading...</p>
+      <input type="text" id="adopterName" placeholder="Your Name" required />
+      <input type="email" id="adopterEmail" placeholder="Your Email" required />
+      <button type="submit">Confirm Adoption</button>
+    </form>
   </div>
-  <script src="script.js"></script>
 </body>
 </html>

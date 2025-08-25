@@ -1,35 +1,35 @@
 <!DOCTYPE html>
-<html lang="en" data-page="volunteer">
+<html lang="en">
 <head>
-  <title>Volunteer</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>Volunteer Duty</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
 </head>
-<body>
+<body data-page="volunteer">
   <div class="sidebar">
     <a href="dashboard.html">Dashboard</a>
     <a href="browse.html">Browse</a>
     <a href="adopt.html">Adopt</a>
-    <a href="vet.html">Vet</a>
     <a href="volunteer.html">Volunteer</a>
     <a href="donate.html">Donate</a>
     <a href="review.html">Review</a>
   </div>
-  <div class="container" id="main">
-    <div class="box">
-      <h3>Become a Caretaker</h3>
-      <form>
-        <input type="date" required>
-        <input type="time" required>
-        <select multiple required>
-          <option>Dog</option>
-          <option>Cat</option>
-          <option>Bird</option>
-          <option>Fish</option>
-        </select>
-        <button type="submit">Volunteer</button>
-      </form>
-    </div>
+
+  <div class="volunteer-container">
+    <h2>Volunteer Duty</h2>
+    <form id="volunteerForm" class="volunteer-form">
+      <input type="text" id="volunteerName" placeholder="Your Name" required />
+      <input type="email" id="volunteerEmail" placeholder="Your Email" required />
+      <select id="volunteerTask" required>
+        <option value="">Select Task</option>
+        <option value="Feeding">Feeding</option>
+        <option value="Cleaning">Cleaning</option>
+        <option value="Walking">Walking</option>
+      </select>
+      <input type="date" id="volunteerDate" required />
+      <button type="submit">Submit Duty</button>
+    </form>
   </div>
-  <script src="script.js"></script>
 </body>
 </html>

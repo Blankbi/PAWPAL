@@ -1,29 +1,32 @@
 <!DOCTYPE html>
-<html lang="en" data-page="donate">
+<html lang="en">
 <head>
-  <title>Donate</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>Donate to PawPal</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
 </head>
-<body>
+<body data-page="donate">
   <div class="sidebar">
     <a href="dashboard.html">Dashboard</a>
     <a href="browse.html">Browse</a>
     <a href="adopt.html">Adopt</a>
-    <a href="vet.html">Vet</a>
     <a href="volunteer.html">Volunteer</a>
     <a href="donate.html">Donate</a>
     <a href="review.html">Review</a>
   </div>
-  <div class="container" id="main">
-    <div class="box">
-      <h3>Thank you for choosing to donate!</h3>
-      <form onsubmit="event.preventDefault(); alert('Thank you for donating!');">
-        <input type="number" placeholder="Enter amount" required>
-        <button type="submit">Donate</button>
-      </form>
-    </div>
+
+  <div class="donate-container">
+    <h2>Support PawPal</h2>
+    <p class="quote">“Every pawprint matters.”</p>
+
+    <form id="donateForm" class="donate-form">
+      <input type="text" id="donorName" placeholder="Your Name" required />
+      <input type="email" id="donorEmail" placeholder="Your Email" required />
+      <input type="number" id="donationAmount" placeholder="Amount (USD)" min="1" required />
+      <textarea id="donationMessage" placeholder="Optional Message"></textarea>
+      <button type="submit">Donate</button>
+    </form>
   </div>
-  <script src="script.js"></script>
 </body>
 </html>
-
