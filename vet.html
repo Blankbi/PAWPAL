@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" data-page="vet">
+<head>
+  <title>Vet Appointment</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="sidebar">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="browse.html">Browse</a>
+    <a href="adopt.html">Adopt</a>
+    <a href="vet.html">Vet</a>
+    <a href="volunteer.html">Volunteer</a>
+    <a href="donate.html">Donate</a>
+    <a href="review.html">Review</a>
+  </div>
+  <div class="container" id="main">
+    <div class="box">
+      <h3>Book Vet Appointment</h3>
+      <form>
+        <input type="date" required>
+        <input type="time" required>
+        <select required>
+          <option value="">Select Service</option>
+          <option>Checkup</option>
+          <option>Sterilization</option>
+          <option>Vaccination</option>
+        </select>
+        <button type="submit">Book</button>
+      </form>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

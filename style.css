@@ -1,0 +1,70 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #e6f2ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.login-container {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  text-align: center;
+}
+
+.login-container h2 {
+  color: #3399cc;
+  margin-bottom: 20px;
+}
+
+input, select, button {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #b3d9ff;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+button {
+  background-color: #3399cc;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #287ba0;
+}
+
+
+/* === Dashboard Styles === */
+.dashboard-container {background-color: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  margin: 50px auto;
+  text-align: center;
+  /* your container styles */
+}
+
+.dashboard-nav a {
+  display: block;
+  background-color: #3399cc;
+  color: white;
+  text-decoration: none;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 6px;
+  transition: background-color 0.3s;
+}
+
+.dashboard-nav a:hover {
+  background-color: #287ba0;
+}

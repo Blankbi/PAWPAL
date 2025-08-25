@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" data-page="browse">
+<head>
+  <title>Browse Animals</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="sidebar">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="browse.html">Browse</a>
+    <a href="adopt.html">Adopt</a>
+    <a href="vet.html">Vet</a>
+    <a href="volunteer.html">Volunteer</a>
+    <a href="donate.html">Donate</a>
+    <a href="review.html">Review</a>
+  </div>
+  <div class="container" id="main">
+    <div class="box">
+      🐶 Bella - Dog - Available <button onclick="adoptAnimal('Bella')">Adopt</button>
+    </div>
+    <div class="box">
+      🐱 Luna - Cat - Not Available <button disabled>Adopt</button>
+    </div>
+    <div class="box">
+      🐦 Kiwi - Bird - Available <button onclick="adoptAnimal('Kiwi')">Adopt</button>
+    </div>
+    <div class="box">
+      🐠 Bubbles - Fish - Available <button onclick="adoptAnimal('Bubbles')">Adopt</button>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
